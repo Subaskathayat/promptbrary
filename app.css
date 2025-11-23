@@ -331,7 +331,7 @@ select:focus, input[type="text"]:focus, input[type="password"]:focus {
     background-color: #f9fafb;
     border: 1px solid #e5e5e5;
     border-radius: var(--border-radius);
-    padding: 1.5rem;
+    padding: 1.2rem;
     min-height: 300px;
     margin-bottom: 0.5rem;
     display: flex;
@@ -406,7 +406,7 @@ select:focus, input[type="text"]:focus, input[type="password"]:focus {
     justify-content: space-between;
     align-items: center;
     padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 0px solid #e5e5e5;
 }
 
 .dialog-header h3 {
@@ -417,16 +417,129 @@ select:focus, input[type="text"]:focus, input[type="password"]:focus {
 }
 
 .dialog-content {
-    padding: 1.5rem;
+    padding: 0 0 0rem 1rem;
     overflow-y: auto;
     flex-grow: 1;
     color: #4b5563;
-    line-height: 1.5;
+    line-height: 3;
+}
+
+/* Toast notification */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #333;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast.error {
+    background-color: #ef4444;
+}
+
+/* Button states */
+.btn-copied,
+.btn-saved {
+    position: relative;
+    color: transparent !important;
+}
+
+.btn-copied::after,
+.btn-saved::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.btn-copied::after {
+    content: 'Copied!';
+}
+
+.btn-saved::after {
+    content: 'Saved!';
+}
+
+.btn-copied img,
+.btn-saved img {
+    opacity: 0;
+}
+
+.btn-copied,
+.btn-saved {
+    min-width: 80px;
+    transition: none;
+}
+
+/* Remove all outlines and focus indicators from output content */
+.output-content {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-focus-ring-color: transparent;
+}
+
+.output-content:focus,
+.output-content:focus-visible,
+.output-content:focus-within,
+.output-content[contenteditable="true"],
+.output-content[contenteditable="true"]:focus,
+.output-content[contenteditable="true"]:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #e5e5e5 !important;
+}
+
+/* Remove outline for WebKit browsers */
+.output-content[contenteditable="true"] {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-focus-ring-color: transparent;
+}
+
+/* For Firefox */
+.output-content[contenteditable="true"]::-moz-focus-inner {
+    border: 0;
+}
+
+/* For Internet Explorer */
+.output-content[contenteditable="true"]:focus {
+    outline: none;
+}
+
+/* For Edge */
+.output-content[contenteditable="true"]:focus-visible {
+    outline: none;
+}
+
+/* For Safari */
+_:-webkit-full-screen, .output-content[contenteditable="true"]:focus {
+    outline: none;
+}
+
+/* For all browsers - last resort */
+.output-content[contenteditable="true"] {
+    -webkit-user-modify: read-write-plaintext-only;
+    -moz-user-modify: read-write-plaintext-only;
+    user-modify: read-write-plaintext-only;
 }
 
 .dialog-footer {
     padding: 1rem 1.5rem;
-    border-top: 1px solid #e5e5e5;
+    border-top: 0px solid #e5e5e5;
     display: flex;
     justify-content: flex-end;
     gap: 0.75rem;

@@ -178,16 +178,42 @@ Important: Only return the enhanced prompt, no additional text, explanations, or
         }
     }
     
+    showToast(message, isError = false) {
+        const toast = document.createElement('div');
+        toast.className = `toast ${isError ? 'error' : ''}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        // Trigger reflow
+        void toast.offsetWidth;
+        
+        // Show toast
+        toast.classList.add('show');
+        
+        // Remove toast after delay
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 300);
+        }, 3000);
+    }
+    
     async copyToClipboard() {
         const textToCopy = this.outputContent.innerText;
         if (textToCopy && !this.outputContent.querySelector('.placeholder-text')) {
             try {
                 await navigator.clipboard.writeText(textToCopy);
-                // Show feedback in the dialog
-                await dialog.alert('Prompt copied to clipboard!', 'Success');
+                // Show feedback
+                const originalClass = this.copyBtn.className;
+                this.copyBtn.classList.add('btn-copied');
+                setTimeout(() => {
+                    this.copyBtn.className = originalClass;
+                }, 2000);
+                this.showToast('Copied to clipboard!');
             } catch (error) {
                 console.error('Failed to copy text:', error);
-                await dialog.error('Failed to copy text to clipboard', 'Error');
+                this.showToast('Failed to copy text', true);
             }
         }
     }
@@ -205,10 +231,17 @@ Important: Only return the enhanced prompt, no additional text, explanations, or
                 });
                 localStorage.setItem('savedPrompts', JSON.stringify(savedItems));
                 
-                await dialog.alert('Prompt saved successfully!', 'Saved');
+                // Show feedback
+                const originalClass = this.saveBtn.className;
+                this.saveBtn.classList.add('btn-saved');
+                setTimeout(() => {
+                    this.saveBtn.className = originalClass;
+                }, 2000);
+                
+                this.showToast('Prompt saved successfully!');
             } catch (error) {
                 console.error('Failed to save prompt:', error);
-                await dialog.error('Failed to save prompt. Please try again.', 'Error');
+                this.showToast('Failed to save prompt', true);
             }
         }
     }
