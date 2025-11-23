@@ -82,7 +82,7 @@
                             <div class="input-with-icon">
                                 <input type="password" id="api-key" placeholder="Enter your API key">
                                 <button class="toggle-password" type="button">
-                                    <img src="icons/View.svg" alt="Show/Hide" class="eye-icon">
+                                    <img src="icons/Hide.svg" alt="Show/Hide" class="eye-icon">
                                 </button>
                             </div>
                         </div>
@@ -100,45 +100,65 @@
                 <h2>Social Media Content Generator</h2>
                 <div class="input-container">
                     <div class="form-group">
-                        <label for="content-type">Content Type:</label>
-                        <select id="content-type">
-                            <option value="instagram">Instagram Caption</option>
-                            <option value="twitter">X (Twitter) Post</option>
-                            <option value="linkedin">LinkedIn Post</option>
-                        </select>
+                        <label>Platform <span class="required">*</span></label>
+                        <div class="chips-container platform-chips">
+                            <button type="button" class="chip" data-value="twitter">
+                                <span class="chip-text">Twitter</span>
+                            </button>
+                            <button type="button" class="chip" data-value="linkedin">
+                                <span class="chip-text">LinkedIn</span>
+                            </button>
+                            <button type="button" class="chip" data-value="threads">
+                                <span class="chip-text">Threads</span>
+                            </button>
+                        </div>
+                        <input type="hidden" id="platform" value="twitter" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="post-idea">Write your post idea:</label>
-                        <textarea id="post-idea" placeholder="Describe what your post is about..."></textarea>
+                        <label for="post-idea">Write your post idea <span class="required">*</span></label>
+                        <textarea id="post-idea" placeholder="Describe what your post is about..." required></textarea>
                     </div>
                     
-                    <div class="options-row">
-                        <div class="form-group">
-                            <label for="formality">Formality:</label>
-                            <select id="formality">
-                                <option value="auto">Auto</option>
-                                <option value="casual">Casual</option>
-                                <option value="neutral">Neutral</option>
-                                <option value="formal">Formal</option>
-                            </select>
+                    <div class="form-group">
+                        <label>Formality</label>
+                        <div class="chips-container formality-chips">
+                            <button type="button" class="chip active" data-value="auto">
+                                <span class="chip-text">Auto</span>
+                            </button>
+                            <button type="button" class="chip" data-value="casual">
+                                <span class="chip-text">Casual</span>
+                            </button>
+                            <button type="button" class="chip" data-value="neutral">
+                                <span class="chip-text">Neutral</span>
+                            </button>
+                            <button type="button" class="chip" data-value="formal">
+                                <span class="chip-text">Formal</span>
+                            </button>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="tone">Tone:</label>
-                            <select id="tone">
-                                <option value="auto">Auto</option>
-                                <option value="enthusiastic">Enthusiastic</option>
-                                <option value="concerned">Concerned</option>
-                                <option value="sincere">Sincere</option>
-                                <option value="sarcasm">Sarcasm</option>
-                                <option value="empathetic">Empathetic</option>
-                                <option value="candid">Candid</option>
-                                <option value="humorous">Humorous</option>
-                                <option value="optimistic">Optimistic</option>
-                                <option value="humble">Humble</option>
-                            </select>
+                        <input type="hidden" id="formality" value="auto">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tone</label>
+                        <div class="chips-container tone-chips">
+                            <button type="button" class="chip active" data-value="auto">
+                                <span class="chip-text">Auto</span>
+                            </button>
+                            <button type="button" class="chip" data-value="enthusiastic">
+                                <span class="chip-text">Enthusiastic</span>
+                            </button>
+                            <button type="button" class="chip" data-value="humorous">
+                                <span class="chip-text">Humorous</span>
+                            </button>
+                            <button type="button" class="chip" data-value="professional">
+                                <span class="chip-text">Professional</span>
+                            </button>
+                            <button type="button" class="chip" data-value="friendly">
+                                <span class="chip-text">Friendly</span>
+                            </button>
                         </div>
+                        <input type="hidden" id="tone" value="auto">
                     </div>
                     
                     <div class="api-key-container">
@@ -147,7 +167,7 @@
                             <div class="input-with-icon">
                                 <input type="password" id="social-api-key" placeholder="Enter your API key">
                                 <button class="toggle-password" type="button">
-                                    <img src="icons/eye_icon.svg" alt="Show/Hide" class="eye-icon">
+                                    <img src="icons/Hide.svg" alt="Show/Hide" class="eye-icon">
                                 </button>
                             </div>
                         </div>

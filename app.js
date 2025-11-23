@@ -1,5 +1,6 @@
 // Import modules
 import './prompt_enhance.js';
+import './socialMediaPostGenerator.js';
 import dialog from './dialog.js';
 
 // Make dialog available globally for easy access
@@ -67,32 +68,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Generate social media post
-    if (generatePostBtn) {
-        generatePostBtn.addEventListener('click', generatePost);
-    }
-    
-    // Function to generate social media post
-    async function generatePost() {
-        const postIdea = document.getElementById('post-idea')?.value.trim();
-        const outputContent = document.getElementById('output-content');
-        
-        if (!postIdea) {
-            await dialog.alert('Please enter your post idea', 'Missing Information');
-            return;
-        }
-        
-        try {
-            // In a real app, you would make an API call here
-            // For now, we'll just show a placeholder
-            if (outputContent) {
-                outputContent.innerHTML = 'Social media post generation will be implemented here.';
-                outputContent.contentEditable = 'true';
-                outputContent.focus();
-            }
-        } catch (error) {
-            console.error('Error generating post:', error);
-            await dialog.error('Failed to generate post. Please try again.', 'Error');
-        }
-    }
+    // Social media post generation is now handled by socialMediaPostGenerator.js
 });

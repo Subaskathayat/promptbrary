@@ -162,6 +162,100 @@
     font-weight: 500;
 }
 
+/* Chip Styles */
+.chips-container {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    border: 1.5px solid #333;
+    background-color: white;
+    color: #333;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    min-width: 80px;
+    text-align: center;
+    user-select: none;
+}
+
+/* Dark theme styles */
+.dark .chip {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+/* Hover state */
+.chip:not(.active):hover {
+    background-color: #f5f5f5;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.dark .chip:not(.active):hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Active/Selected state */
+.chip.active {
+    background-color: #1a1a1a;
+    border-color: #1a1a1a;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.dark .chip.active {
+    background-color: #000;
+    border-color: #000;
+}
+
+/* Ripple effect */
+.chip::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+}
+
+.chip:active::after {
+    transform: scale(1.5);
+    opacity: 1;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Focus state for accessibility */
+.chip:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .chip {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        min-width: 70px;
+    }
+}
+
 textarea {
     
     width: 100%;
@@ -191,7 +285,7 @@ textarea:focus {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
 .form-group label {
