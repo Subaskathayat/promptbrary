@@ -136,7 +136,7 @@ img {
 /* Hero Section */
 .hero {
     padding: 4rem 0 6rem;
-    margin-top: 4rem;
+    margin-top: 2rem;
 }
 
 .hero .container {
@@ -155,12 +155,34 @@ img {
     line-height: 1.1;
 }
 
+
 .hero .subtitle {
     font-size: 1.25rem;
     font-weight: 500;
     color: var(--text);
     margin-bottom: 1.5rem;
 }
+
+.ai-model-icons {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px;
+    margin-bottom: 25px;
+    width: 48%;
+}
+
+
+.ai-model-icons img {
+    height: 24px;
+    margin: 4px;
+}
+
+.ai-model-icons .arrow-icon {
+    height: 14px;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
 
 .hero .description {
     font-size: 1.125rem;
