@@ -5,7 +5,7 @@
     --text-light: #666666;
     --border: #e5e5e5;
     --white: #ffffff;
-    --gray-50: #f9fafb;
+    --gray-50: #ebeef0d8;
     --gray-100: #f3f4f6;
 }
 
@@ -135,7 +135,7 @@ img {
 
 /* Hero Section */
 .hero {
-    padding: 8rem 0 6rem;
+    padding: 4rem 0 6rem;
     margin-top: 4rem;
 }
 
@@ -167,12 +167,13 @@ img {
     margin-bottom: 2.5rem;
     padding: 6rem 1rem 6rem 1rem;
     max-width: 600px;
+    border-radius: 8px;
 }
 
 .cta-buttons {
     display: flex;
     gap: 1rem;
-    margin-top: 2rem;
+    margin-top: 0rem;
 }
 
 .hero-image {
@@ -184,7 +185,8 @@ img {
 
 .hero-image img {
     border-radius: 8px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+
 }
 
 /* Description Section */
@@ -351,6 +353,7 @@ footer {
         width: 100%;
         max-width: 600px;
         margin: 0 auto;
+        
     }
 }
 
