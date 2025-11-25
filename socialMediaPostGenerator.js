@@ -118,12 +118,12 @@ class SocialMediaPostGenerator {
     }
 
     async generateSocialMediaPost(idea, platform, formality, tone, apiKey) {
-        const systemPrompt = `You are a professional social media content creator. Generate an engaging, platform-optimized social media post based on the following details no emojis:
+        const systemPrompt = `You are a professional social media content creator. Generate an engaging, platform-optimized social media post based on the following details and 0 emojis:
 - Platform: ${platform}
 - Tone: ${tone}
 - Formality: ${formality}
 
-Make sure the post is engaging, on-brand, and optimized for the specified platform.`;
+Make sure the post is engaging, on-brand, and optimized for the specified platform. and no emoji at starting of the content, and contains only one emoji at the last of content, and then the hastags with one line break and maximum 2 hashtags `;
 
         const messages = [
             { role: 'system', content: systemPrompt },
