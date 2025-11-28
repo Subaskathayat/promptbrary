@@ -41,7 +41,7 @@ class PromptEnhancer {
 
         const lengthInstruction = this.getLengthInstruction(length);
         
-        const systemPrompt = `You are an expert prompt engineer. Enhance the following raw text into a professionally engineered AI prompt. 
+        const systemPrompt = `You are an expert prompt engineer. Enhance the following raw text into a professionally engineered ready to use AI prompt. 
 Make it clear, structured, powerful, and optimized for high-quality outputs. 
 ${lengthInstruction}
 
