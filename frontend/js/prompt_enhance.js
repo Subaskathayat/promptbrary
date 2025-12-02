@@ -2,14 +2,14 @@
 class PromptEnhancer {
     constructor(apiKey) {
         this.apiKey = apiKey;
-        this.API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+        this.API_URL = '/api/enhance-prompt';
         
         // Initialize DOM elements
         this.promptInput = document.getElementById('prompt-input');
         this.enhanceBtn = document.getElementById('enhance-btn');
         this.outputContent = document.getElementById('output-content');
-        this.copyBtn = document.getElementById('copy-btn');
-        this.saveBtn = document.getElementById('save-btn');
+        this.copyBtn = document.getElementById('copy-post-btn');
+        this.saveBtn = document.getElementById('save-post-btn');
         this.reEnhanceBtn = document.getElementById('re-enhance-btn');
         this.apiKeyInput = document.getElementById('api-key');
         this.lengthSelect = document.getElementById('length');
@@ -30,11 +30,7 @@ class PromptEnhancer {
         this.updateButtonStates();
     }
 
-    async enhancePrompt(prompt, length = 'auto') {
-        if (!this.apiKey) {
-            throw new Error('API key is required');
-        }
-
+    async enhancePrompt(prompt, length = 'auto', tone = 'professional') {
         if (!prompt) {
             throw new Error('Prompt cannot be empty');
         }
@@ -59,26 +55,19 @@ Important: Only return the enhanced prompt, no additional text like your enhance
             const response = await fetch(this.API_URL, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${this.apiKey}`,
                     'Content-Type': 'application/json',
-                    'HTTP-Referer': window.location.href,
-                    'X-Title': 'Promptbrary'
                 },
                 body: JSON.stringify({
-                    model: 'openai/gpt-3.5-turbo',
-                    messages: messages,
-                    temperature: 0.7,
-                    max_tokens: 1000
+                    prompt,
+                    tone,
+                    length
                 })
             });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error?.message || 'Failed to enhance prompt');
-            }
-
             const data = await response.json();
-            return data.choices[0]?.message?.content?.trim() || '';
+            if (!response.ok || data.success === false) {
+                throw new Error(data.error || 'Failed to enhance prompt');
+            }
+            return (data.enhancedPrompt || '').trim();
         } catch (error) {
             console.error('Error enhancing prompt:', error);
             throw error;
@@ -141,15 +130,9 @@ Important: Only return the enhanced prompt, no additional text like your enhance
     async enhancePromptHandler() {
         const prompt = this.promptInput.value.trim();
         const length = this.lengthSelect ? this.lengthSelect.value : 'auto';
-        const apiKey = this.apiKeyInput ? this.apiKeyInput.value : this.apiKey;
-        
+
         if (!prompt) {
             await dialog.alert('Please enter a prompt to enhance', 'Missing Prompt');
-            return;
-        }
-        
-        if (!apiKey) {
-            await dialog.alert('Please enter your API key', 'API Key Required');
             return;
         }
         
@@ -163,16 +146,16 @@ Important: Only return the enhanced prompt, no additional text like your enhance
         this.enhanceBtn.innerHTML = '<span>Enhancing...</span><div class="spinner"></div>';
         
         try {
-            this.apiKey = apiKey; // Update API key if it was provided via input
             const enhancedPrompt = await this.enhancePrompt(prompt, length);
-            
+
             // Set the enhanced prompt and make it editable
             this.outputContent.innerHTML = enhancedPrompt.replace(/\n/g, '<br>');
             this.outputContent.contentEditable = 'true';
             this.outputContent.focus();
             
             // Save to history and update character count
-            this.saveToHistory(prompt, enhancedPrompt, length);
+            this.saveToHistory(prompt, enhancedPrompt, { length });
+
             this.updateCharCounts();
             
         } catch (error) {

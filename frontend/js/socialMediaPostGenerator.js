@@ -1,15 +1,12 @@
 // Social Media Post Generator Module
 class SocialMediaPostGenerator {
-    constructor(apiKey) {
-        this.API_URL = 'https://openrouter.ai/api/v1/chat/completions';
-        
+    constructor() {
         // Initialize DOM elements
         this.postIdeaInput = document.getElementById('post-idea');
         this.generatePostBtn = document.getElementById('generate-post-btn');
         this.outputContent = document.getElementById('output-content');
         this.copyBtn = document.getElementById('copy-post-btn');
         this.saveBtn = document.getElementById('save-post-btn');
-        this.apiKeyInput = document.getElementById('social-api-key');
         
         // Initialize chip groups
         this.platformChips = {
@@ -18,16 +15,16 @@ class SocialMediaPostGenerator {
             currentValue: 'twitter' // Default value
         };
         
-        this.formalityChips = {
-            container: document.querySelector('.formality-chips'),
-            input: document.getElementById('formality'),
-            currentValue: 'auto' // Default value
+        this.styleChips = {
+            container: document.querySelector('.style-chips'),
+            input: document.getElementById('style'),
+            currentValue: 'informative' // Default value
         };
         
         this.toneChips = {
             container: document.querySelector('.tone-chips'),
             input: document.getElementById('tone'),
-            currentValue: 'auto' // Default value
+            currentValue: 'friendly' // Default value
         };
         
         // Initialize state flags
@@ -42,7 +39,7 @@ class SocialMediaPostGenerator {
     initializeEventListeners() {
         // Platform chips
         this.setupChipGroup(this.platformChips);
-        this.setupChipGroup(this.formalityChips);
+        this.setupChipGroup(this.styleChips);
         this.setupChipGroup(this.toneChips);
         
         // Handle generate post button click
@@ -99,110 +96,64 @@ class SocialMediaPostGenerator {
         });
     }
 
-    animateChipSelection(chip) {
-        // Add ripple effect
-        const ripple = document.createElement('span');
-        ripple.className = 'chip-ripple';
-        chip.appendChild(ripple);
-        
-        // Remove ripple after animation
-        setTimeout(() => {
-            ripple.remove();
-        }, 600);
-        
-        // Add scale animation
-        chip.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            chip.style.transform = '';
-        }, 200);
-    }
-
-    async generateSocialMediaPost(idea, platform, formality, tone, apiKey) {
-        const systemPrompt = `You are a professional social media content creator. Generate an engaging, platform-optimized social media post based on the following details and 0 emojis:
-- Platform: ${platform}
-- Tone: ${tone}
-- Formality: ${formality}
-
-Make sure the post is engaging, on-brand, and optimized for the specified platform. and no emoji at starting of the content, and contains only one emoji at the last of content, and then the hastags with one line break and maximum 2 hashtags `;
-
-        const messages = [
-            { role: 'system', content: systemPrompt },
-            { 
-                role: 'user', 
-                content: `Generate a ${tone} social media post for ${platform} with ${formality} formality based on this idea: ${idea}`
-            }
-        ];
-
-        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${apiKey}`,
-                'Content-Type': 'application/json',
-                'HTTP-Referer': window.location.href,
-                'X-Title': 'Promptbrary'
-            },
-            body: JSON.stringify({
-                model: 'openai/gpt-3.5-turbo',
-                messages: messages,
-                temperature: 0.7,
-                max_tokens: 1000
-            })
-        });
-
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.error?.message || 'Failed to generate post');
-        }
-
-        const data = await response.json();
-        return data.choices[0]?.message?.content?.trim() || '';
-    }
-
     async generatePost() {
-        const postIdea = this.postIdeaInput?.value.trim();
-        const apiKey = this.apiKeyInput?.value.trim();
+        const topic = this.postIdeaInput.value.trim();
+        const platform = this.platformChips.currentValue;
+        const style = this.styleChips.currentValue;
+        const tone = this.toneChips.currentValue;
         
-        // Validate required fields
-        if (!postIdea) {
-            this.showError('Please enter your post idea');
-            this.postIdeaInput.focus();
+        if (!topic) {
+            await dialog.alert('Please enter a topic or idea for your post', 'Missing Topic');
             return;
         }
-
-        if (!apiKey) {
-            this.showError('Please enter your API key');
-            this.apiKeyInput.focus();
-            return;
-        }
-
+        
         // Show loading state
         this.isGenerating = true;
-        this.updateButtonStates();
+        const originalText = this.generatePostBtn.innerHTML;
+        this.generatePostBtn.disabled = true;
+        this.generatePostBtn.innerHTML = '<span>Generating...</span><div class="spinner"></div>';
         
-        if (this.outputContent) {
-            this.outputContent.textContent = 'Generating your post...';
-            this.outputContent.classList.remove('error');
-        }
-
         try {
-            const platform = this.platformChips.currentValue;
-            const formality = this.formalityChips.currentValue;
-            const tone = this.toneChips.currentValue;
+            // Clear previous output
+            this.outputContent.innerHTML = '';
+            this.outputContent.contentEditable = 'false';
             
-            const post = await this.generateSocialMediaPost(postIdea, platform, formality, tone, apiKey);
+            // Call our backend API
+            const response = await fetch('/api/generate-social-post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    platform,
+                    topic,
+                    style,
+                    tone
+                })
+            });
+
+            const data = await response.json();
             
-            // Set the generated post
-            if (this.outputContent) {
-                this.outputContent.textContent = post;
-                this.outputContent.classList.remove('error');
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to generate post');
             }
+            
+            // Display the generated post
+            this.outputContent.innerHTML = data.post.replace(/\n/g, '<br>');
+            this.outputContent.contentEditable = 'true';
+            this.outputContent.focus();
+            
+            // Update UI
+            this.updateButtonStates();
             
         } catch (error) {
             console.error('Error generating post:', error);
-            this.showError(`Error: ${error.message || 'Failed to generate post'}`);
+            await dialog.error(`Error: ${error.message || 'Failed to generate post'}`, 'Error');
         } finally {
+            // Reset button
             this.isGenerating = false;
-            this.updateButtonStates();
+            this.generatePostBtn.disabled = false;
+            this.generatePostBtn.innerHTML = originalText;
         }
     }
 

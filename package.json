@@ -18,10 +18,14 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.22.1"
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.22.1",
+    "express-rate-limit": "^8.2.1",
+    "openai": "^6.9.1"
   },
   "engines": {
-    "node": ">=14.x"
+    "node": ">=18.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
@@ -34,5 +38,16 @@
   "bugs": {
     "url": "https://github.com/Subaskathayat/prompthancer/issues"
   },
-  "homepage": "https://github.com/Subaskathayat/prompthancer#readme"
+  "homepage": "https://github.com/Subaskathayat/prompthancer#readme",
+  "nodemonConfig": {
+    "watch": [
+      "server.js",
+      ".env"
+    ],
+    "ext": "js,json,env",
+    "ignore": [
+      "node_modules/**",
+      ".git/**"
+    ]
+  }
 }
